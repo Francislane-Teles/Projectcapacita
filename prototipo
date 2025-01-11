@@ -1,0 +1,24 @@
+//Contagem de palavras
+
+import Foundation
+
+// Verifica se foi passado pelo menos um argumento
+if CommandLine.arguments.count > 1 { 
+// Caminho do arquivo de texto a ser lido.  
+    let filePath = CommandLine.arguments[1]   
+
+do {
+// Tenta ler o conteúdo do arquivo no caminho especificado
+        let content = try String(contentsOfFile: filePath)
+//Dividido em partes
+        let wordCount = content.split(separator: " ").count 
+//Quantidade de palavras no arquivo
+        print("O arquivo tem \(wordCount) palavras.")
+
+    } catch {
+        print("Erro ao ler o arquivo: \(error)")
+    }
+} else {
+// Caso não tenha sido passado o caminho do arquivo
+    print("Uso: programa <caminho_do_arquivo>")
+}
