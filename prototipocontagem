@@ -1,24 +1,83 @@
-//Contagem de palavras
-
 import Foundation
 
-// Verifica se foi passado pelo menos um argumento
-if CommandLine.arguments.count > 1 { 
-// Caminho do arquivo de texto a ser lido.  
-    let filePath = CommandLine.arguments[1]   
+// Função para contar palavras no conteúdo do arquivo
+func contarPalavras(_ content: String) {
+    // Divide o conteúdo em palavras separadas por espaços e conta quantas existem
+    let wordCount = content.split(separator: " ").count
+    // Exibe o total de palavras no arquivo
+    print("O arquivo tem \(wordCount) palavras.")
+}
 
-do {
-// Tenta ler o conteúdo do arquivo no caminho especificado
-        let content = try String(contentsOfFile: filePath)
-//Dividido em partes
-        let wordCount = content.split(separator: " ").count 
-//Quantidade de palavras no arquivo
-        print("O arquivo tem \(wordCount) palavras.")
+// Função para buscar uma palavra específica no conteúdo do arquivo
+func buscarPalavra(_ content: String, palavra: String) {
+    // Filtra as palavras no conteúdo para encontrar as correspondências e conta quantas vezes a palavra aparece
+    let ocorrencias = content.split(separator: " ").filter { $0 == palavra }.count
+    // Exibe o número de ocorrências da palavra
+    print("A palavra '\(palavra)' aparece \(ocorrencias) vezes no arquivo.")
+}
 
+// Função para substituir uma palavra por outra no conteúdo do arquivo
+func substituirPalavra(_ content: String, palavraAntiga: String, palavraNova: String) -> String {
+    // Substitui todas as ocorrências da palavra antiga pela nova
+    let novoConteudo = content.replacingOccurrences(of: palavraAntiga, with: palavraNova)
+    // Exibe uma mensagem indicando que a substituição foi concluída
+    print("Substituição concluída.")
+    // Retorna o conteúdo atualizado com a substituição
+    return novoConteudo
+}
+
+// Verifica se há argumentos suficientes fornecidos na linha de comando
+if CommandLine.arguments.count > 2 {
+    // Obtém o comando (ex: "contar", "buscar", "substituir") a partir dos argumentos
+    let comando = CommandLine.arguments[1]
+    // Obtém o caminho do arquivo fornecido no argumento
+    let filePath = CommandLine.arguments[2]
+    
+    do {
+        // Tenta ler o conteúdo do arquivo no caminho especificado
+        var content = try String(contentsOfFile: filePath)
+        
+        // Verifica qual comando foi passado e executa a funcionalidade correspondente
+        switch comando {
+        case "contar":
+            // Chama a função para contar palavras
+            contarPalavras(content)
+            
+        case "buscar":
+            // Verifica se o argumento adicional para a palavra a buscar foi fornecido
+            if CommandLine.arguments.count > 3 {
+                let palavra = CommandLine.arguments[3]
+                // Chama a função para buscar a palavra no conteúdo
+                buscarPalavra(content, palavra: palavra)
+            } else {
+                // Exibe uma mensagem de uso correto se faltar o argumento
+                print("Uso: programa buscar <caminho_do_arquivo> <palavra>")
+            }
+            
+        case "substituir":
+            // Verifica se os argumentos adicionais para palavras antiga e nova foram fornecidos
+            if CommandLine.arguments.count > 4 {
+                let palavraAntiga = CommandLine.arguments[3]
+                let palavraNova = CommandLine.arguments[4]
+                // Chama a função para substituir a palavra e atualiza o conteúdo
+                content = substituirPalavra(content, palavraAntiga: palavraAntiga, palavraNova: palavraNova)
+                
+                // Tenta salvar o conteúdo atualizado de volta no arquivo
+                try content.write(toFile: filePath, atomically: true, encoding: .utf8)
+            } else {
+                // Exibe uma mensagem de uso correto se faltarem argumentos
+                print("Uso: programa substituir <caminho_do_arquivo> <palavra_antiga> <palavra_nova>")
+            }
+            
+        default:
+            // Exibe uma mensagem de erro para comandos desconhecidos
+            print("Comando desconhecido. Use 'contar', 'buscar' ou 'substituir'.")
+        }
     } catch {
-        print("Erro ao ler o arquivo: \(error)")
+        // Exibe uma mensagem de erro caso algo dê errado ao manipular o arquivo
+        print("Erro ao manipular o arquivo: \(error)")
     }
 } else {
-// Caso não tenha sido passado o caminho do arquivo
-    print("Uso: programa <caminho_do_arquivo>")
+    // Exibe uma mensagem de uso correto caso os argumentos não sejam suficientes
+    print("Uso: programa <comando> <caminho_do_arquivo> [argumentos]")
 }
