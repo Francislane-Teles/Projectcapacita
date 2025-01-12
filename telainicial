@@ -1,0 +1,25 @@
+import SwiftUI  // Importa o framework SwiftUI para usar recursos de interface gráfica
+
+struct ContentView: View {  // Define a estrutura ContentView, que conforma o protocolo View
+    var body: some View {  // O corpo da visualização, onde os elementos da interface são definidos
+        VStack {  // Cria um "Vertical Stack" (pilha vertical) para empilhar os elementos verticalmente
+            // Imagem com o símbolo do sistema
+            Image(systemName: "leaf.circle.fill")  // Usa o ícone do sistema "leaf.circle.fill"
+                .resizable()  // Permite que a imagem seja redimensionada
+                .scaledToFit()  // Faz a imagem se ajustar ao espaço disponível sem distorção
+                .frame(width: 100, height: 100)  // Define o tamanho da imagem para 100x100 pontos
+                .foregroundColor(.green)  // Define a cor do ícone para verde
+            
+            // Texto com a mensagem
+            Text("Lembre-se de regar suas plantas!")  // Exibe a mensagem "Lembre-se de regar suas plantas!"
+                .font(.headline)  // Define a fonte como um título principal (headline)
+                .padding()  // Adiciona um preenchimento ao redor do texto
+        }
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {  // Estrutura usada para criar uma pré-visualização da interface no Xcode
+    static var previews: some View {  // Define o conteúdo da pré-visualização
+        ContentView()  // Mostra a ContentView como pré-visualização
+    }
+}
